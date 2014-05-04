@@ -3,5 +3,5 @@ require_relative "../app/models/StockQueryDetailed"
 require_relative "../app/models/StockFactory"
 require_relative "../app/models/Portfolio"
 
-StockFactory.stocks(['AAPL', 'LUV'])
-p portfolio = Portfolio.new(StockFactory.stocks(['AAPL']))
+# StockFactory.stocks(['AAPL', 'LUV'])
+p portfolio = Portfolio.new(StockFactory.stocks(['AAPL','LUV','BBY', 'MSFT', 'TSLA', 'VTSMX', 'VTI']))
