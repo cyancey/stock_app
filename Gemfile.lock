@@ -39,6 +39,8 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.0.3)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
@@ -82,6 +84,7 @@ DEPENDENCIES
   pg
   rack-test
   rake
+  rest-client
   rspec
   shotgun
   shoulda-matchers
