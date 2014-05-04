@@ -4,15 +4,22 @@ get '/' do
 
 end
 
-get '/login' do
+post '/login' do
   @user = User.find_by_email(params[:email])
+
+  p params
   if @user.password == params[:password]
-    # give_token
+    puts 'login worked'
   else
+    redirect '/'
       # redirect_to home_url
   end
 end
 
+post '/users' do
+  p params
+  redirect '/'
+end
 
 
 
