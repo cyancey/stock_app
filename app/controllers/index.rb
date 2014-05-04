@@ -1,5 +1,5 @@
 get '/' do
-  # Look in app/views/index.erb
+  @user = User.find(session[:user_id])
   erb :index
 
 end
@@ -9,7 +9,9 @@ post '/login' do
 
   p params
   if @user.password == params[:password]
+    session[:user_id] = @user.id
     puts 'login worked'
+    redirect '/'
   else
     redirect '/'
       # redirect_to home_url
@@ -18,6 +20,8 @@ end
 
 post '/users' do
   p params
+  @user = User.new(params)
+  @user.save!
   redirect '/'
 end
 
