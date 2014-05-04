@@ -17,3 +17,5 @@ fake_stocks = dummy_stocks(dummy_data)
 portfolio = Portfolio.new(fake_stocks)
 p  portfolio.stocks
 
+portfolio.stocks[0]
+
