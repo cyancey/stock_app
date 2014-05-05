@@ -19,7 +19,8 @@ gem 'shotgun'
 
 gem 'rest-client'
 
-gem 'bcrypt-ruby'
+# gem 'bcrypt-ruby'
+gem 'bcrypt'
 
 group :test do
   # gem 'faker'
