@@ -1,6 +1,10 @@
 get '/' do
-  @user = User.find(session[:user_id])
-  erb :index
+  if logged_in?
+    @user = current_user
+    erb :home
+  else
+    erb :index
+  end
 
 end
 
@@ -21,7 +25,9 @@ end
 post '/users' do
   p params
   @user = User.new(params)
-  @user.save!
+  if @user && @user.save
+    session[:user_id] = @user.id
+  end
   redirect '/'
 end
 
