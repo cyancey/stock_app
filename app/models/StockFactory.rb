@@ -1,3 +1,5 @@
+require_relative 'StockQueryDetailed'
+
 module StockFactory
   def self.stocks(quotes_array)
     stocks_array = []

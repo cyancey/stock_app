@@ -1,5 +1,6 @@
 class Stock
   attr_reader :symbol, :ask, :avg_daily_vol, :bid, :ask_real_time, :bid_real_time, :book_value, :change_percentage_change, :change, :commission, :change_real_time, :after_hours_change_real_time, :dividend_share, :last_trade_date, :trade_date, :earnings_per_share, :eps_current_yr_estimate, :eps_next_yr_estimate, :eps_next_qtr_estimate, :day_low, :day_high, :year_low, :year_high, :market_cap, :market_cap_realtime, :ebitda, :change_from_year_low, :percentage_change_from_year_low, :last_trade_price, :day_range, :day_range_realtime, :fifty_day_mvg_avg, :two_hundred_day_mvg_avg, :change_from_two_hundred_day_mvg_avg, :percent_change_from_two_hundred_day_mvg_avg, :change_from_fifty_day_mvg_avg, :percent_change_from_fifty_day_mvg_avg, :name, :open, :previous_close, :ex_dividend_date, :per_ratio, :dividend_pay_date, :per_ratio_realtime, :peg_ratio, :price_eps_estimate_current_yr, :price_eps_estimate_next_yr, :short_ratio, :last_trade_time, :volume, :year_range, :day_value_change, :day_change_realtime, :stock_exchange, :dividend_yield, :percent_change
+  attr_accessor :user_shares
 
   def initialize(args)
     @symbol = args.fetch("symbol", nil)

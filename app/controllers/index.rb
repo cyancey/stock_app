@@ -1,6 +1,9 @@
 get '/' do
   if logged_in?
     @user = current_user
+    if @user.user_stocks.count > 0
+      p user_stock_data_with_share_quantity(@user)
+    end
     erb :home
   else
     erb :index
@@ -33,7 +36,6 @@ end
 
 post '/logout' do
   session[:user_id] = nil
-  puts "here"
   redirect '/'
 end
 
