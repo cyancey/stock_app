@@ -31,5 +31,11 @@ post '/users' do
   redirect '/'
 end
 
+post '/logout' do
+  session[:user_id] = nil
+  puts "here"
+  redirect '/'
+end
+
 
 
