@@ -2,7 +2,8 @@ get '/' do
   if logged_in?
     @user = current_user
     if @user.user_stocks.count > 0
-      p user_stock_data_with_share_quantity(@user)
+      @stocks = user_stock_data_with_share_quantity(@user)
+      p @stocks
     end
     erb :home
   else
