@@ -40,5 +40,9 @@ post '/logout' do
   redirect '/'
 end
 
+post '/users/stocks' do
+  current_user.user_stocks.create(params)
+  redirect '/'
+end
 
 
