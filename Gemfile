@@ -1,5 +1,5 @@
 source :rubygems
-
+ruby '2.0.0'
 # PostgreSQL driver
 gem 'pg'
 
@@ -22,7 +22,7 @@ gem 'rest-client'
 gem 'bcrypt-ruby'
 
 group :test do
-  gem 'faker'
+  # gem 'faker'
   gem 'rspec'
   gem 'rack-test'
   gem 'capybara'
