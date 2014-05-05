@@ -6,6 +6,8 @@ module StockQuery
     JSON.parse(query)['query']['results']['quote']
   end
 
+  private
+
   def self.parse_result(result)
     result.each do |quote_hash|
       quote_hash.each do |key, value|
@@ -14,8 +16,6 @@ module StockQuery
       puts "*" * 50
     end
   end
-
-  private
 
   def self.quotes_to_query_format(quotes_array)
     string = "("
