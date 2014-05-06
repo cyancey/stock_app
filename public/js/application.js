@@ -8,7 +8,8 @@ function setListeners() {
   $("#add_another_stock").on('click', addAnotherStock)
 }
 
-function showAddStocksForm() {
+function showAddStocksForm(event) {
+  event.preventDefault()
   $("#add_stock_form").toggleClass("hidden")
   $("#add_stocks_link").toggleClass("hidden")
   $("#cancel_stock_add_link").toggleClass("hidden")
@@ -16,6 +17,7 @@ function showAddStocksForm() {
 }
 
 function cancelStockAdd() {
+  event.preventDefault()
   $("#cancel_stock_add_link").toggleClass("hidden")
   $("#add_stocks_link").toggleClass("hidden")
   $("#add_stock_form").toggleClass("hidden")
@@ -23,6 +25,7 @@ function cancelStockAdd() {
 }
 
 function addAnotherStock() {
+  event.preventDefault()
   var add_stock_form = $("#add_stock_form")
   $("#end_form_break").remove()
   $("#add_stock_form_submit").remove()
