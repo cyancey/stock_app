@@ -22,7 +22,6 @@ post '/login' do
     redirect '/'
   else
     redirect '/'
-      # redirect_to home_url
   end
 end
 
@@ -41,7 +40,10 @@ post '/logout' do
 end
 
 post '/users/stocks' do
-  current_user.user_stocks.create(params)
+  inputs_for_adding_stocks(params).each do |stock_input|
+    current_user.user_stocks.create(stock_input)
+  end
+
   redirect '/'
 end
 

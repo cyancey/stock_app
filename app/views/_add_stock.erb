@@ -1,7 +1,11 @@
-<div class = "add_stock">
-  <form action="users/stocks" method="post">
+<div class = "add_stocks">
+  <a href="#" id="add_stocks_link">Add Stock(s)</a>
+  <a href="#" id="cancel_stock_add_link" class="hidden">Cancel Stock Additions</a>
+  <form action="users/stocks" method="post" id="add_stock_form" class="hidden">
     <input type = "text" name = "ticker_symbol" placeholder = "Ticker Symbol">
     <input type = "text" name = "share_quantity" placeholder = "Number of Shares">
-    <input type = "submit" value= "Add Stock">
+    <br id="end_form_break">
+    <input type = "submit" value= "Add Stock" id="add_stock_form_submit">
   </form>
+  <a href="#" id="add_another_stock" class="hidden">Add Another</a>
 </div>
