@@ -1,4 +1,4 @@
-<div class = "stock_list">
+<div class = "stock_list container">
   <% @stocks.each do |stock| %>
     <%= erb :_stock_detail, locals: {stock: stock} %>
   <% end %>

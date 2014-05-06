@@ -7,3 +7,11 @@
 th {
   text-align: left;
 }
+
+body {
+  background: url("img/paper_fibers.png");
+}
+
+.hidden {
+  display: none;
+}
