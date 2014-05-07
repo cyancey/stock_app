@@ -109,5 +109,5 @@ function addStocks(event) {
 }
 
 function appendNewStocks(response) {
-  console.log(response)
+  $(".stock_list").append($(response).html())
 }

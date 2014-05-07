@@ -53,14 +53,15 @@ end
 post '/users/stocks' do
   stock_symbols = []
   share_quantities = []
-  sanitized_ticker_symbol = params[:ticker_symbol].upcase unless params[:ticker_symbol] == nil
+  # sanitized_ticker_symbol = params[:ticker_symbol].upcase unless params[:ticker_symbol] == nil
   inputs_for_adding_stocks(params).each do |stock_input|
-    stock = current_user.user_stocks.create(ticker_symbol: sanitized_ticker_symbol, share_quantity: params[:share_quantity])
-    stock_symbols << stock.ticker_symbol unless stock.id == nil
-    share_quantities << params[:share_quantity] unless stock.id == nil
+    unless stock_input[:ticker_symbol].nil? || stock_input[:ticker_symbol] == ""
+      stock = current_user.user_stocks.create(ticker_symbol: stock_input[:ticker_symbol], share_quantity: stock_input[:share_quantity])
+      stock_symbols << stock.ticker_symbol
+      share_quantities << stock.share_quantity
+    end
   end
   @stocks = new_stocks(stock_symbols, share_quantities)
-  p @stocks
 
   erb :_stock_list, layout:false
 end
