@@ -3,22 +3,10 @@ $(document).ready(function() {
 });
 
 function setListeners() {
-  // $("#add_stocks_link").on('click', showAddStocksForm)
   $(".home").on('click', "#add_stocks_link", showAddStocksForm)
-
-
-
-  // $("#cancel_stock_add_link").on('click', cancelStockAdd)
   $(".home").on('click', "#cancel_stock_add_link", cancelStockAdd)
-
-
-  // $("#add_another_stock").on('click', addAnotherStock)
-
   $(".home").on('click', "#add_another_stock", addAnotherStock)
-
-
   $(".stock_list").on('click', '.delete_stock', deleteStock)
-
   $(".home").on('submit', "#add_stock_form", addStocks)
 }
 
