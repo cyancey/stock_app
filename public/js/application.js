@@ -105,6 +105,8 @@ function addStocks(event) {
     data: $(this).serialize()
   })
 
+  resetAddStockForm()
+
   ajaxRequest.done(appendNewStocks)
 }
 
