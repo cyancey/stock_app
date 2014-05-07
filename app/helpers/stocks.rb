@@ -10,12 +10,39 @@ def user_stock_data_with_share_quantity(user)
   share_quantities = user.user_stocks.map do |user_stock|
     user_stock.share_quantity
   end
+  apply_share_quantity_to_stock_objects(user_stock_data(user), share_quantities)
+
+  # counter = 0
+  # user_stock_data(user).each do |stock_object|
+  #   stock_object.user_shares = share_quantities[counter]
+  #   counter += 1
+  # end
+end
+
+def new_stocks(stock_quotes_array, share_quantity_array)
+  stocks = StockFactory.stocks(stock_quotes_array)
+  stocks_with_qty = apply_share_quantity_to_stock_objects(stocks, share_quantity_array)
+  p stocks_with_qty
+end
+
+def apply_share_quantity_to_stock_objects(stock_objects, share_quantities)
   counter = 0
-  user_stock_data(user).each do |stock_object|
+  stock_objects.each do |stock_object|
     stock_object.user_shares = share_quantities[counter]
     counter += 1
   end
 end
+
+# def apply_user_stock_id_to_stock_obj(user)
+#   user_stock_ids = user.user_stocks.map do |user_stock|
+#     user_stock.id
+#   end
+#   counter = 0
+#   user_stock_data(user).each do |stock_object|
+#     stock_object.id = user_stock_ids[counter]
+#     counter += 1
+#   end
+# end
 
 def convert_added_stocks_to_nested_array(params)
   stock_inputs = []
