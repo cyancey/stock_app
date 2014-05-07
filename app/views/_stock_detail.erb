@@ -1,7 +1,16 @@
-<div class = "stock_detail" id="<%=stock.symbol%>">
-  <h3><%= "#{stock.name} (#{stock.symbol})" %></h3>
+<div class = "stock_detail" id="<%=stock.symbol%>" data-price="<%=stock.last_trade_price%>" data-share-quantity="<%=stock.user_shares%>">
+  <div class ="stock_header"><%= "#{stock.name} (#{stock.symbol})" %></div>
+  <div class="price">$ <%= stock.last_trade_price %></div>
+  <div class="shares">Shares: <%= stock.user_shares %></div>
+  <div class = "remove_stock">
+    <a href = "#" class="delete_stock" data-symbol = "<%=stock.symbol %>">x</a>
+  </div>
+</div>
+
+<!-- <div class = "stock_detail" id="<%=stock.symbol%>">
+  <h3><= "#{stock.name} (#{stock.symbol})" %></h3>
   <p>Last Trade Price: <%= stock.last_trade_price %></p>
   <p>Shares Owned: <%= stock.user_shares %></p>
   <p>Two Hundred Day Moving Average: <%= stock.two_hundred_day_mvg_avg %></p>
   <a href = "#" class="delete_stock" data-symbol = "<%=stock.symbol %>">Remove</a>
-</div>
+</div> -->
