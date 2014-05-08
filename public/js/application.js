@@ -158,9 +158,6 @@ function updatePortfolioValue() {
 
 function moreInfo(event) {
   event.preventDefault()
-  console.log("in more info")
-  console.log(this)
-  console.log(event)
   var ticker_symbol = this.dataset.symbol
 
   var ajaxRequest = $.ajax({
