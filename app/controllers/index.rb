@@ -1,4 +1,4 @@
-require_relative "../models/stock_query_detailed"
+# require_relative "../models/stock_query_detailed"
 
 get '/' do
   if logged_in?

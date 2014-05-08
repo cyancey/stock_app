@@ -178,16 +178,21 @@ function appendMoreInfo(response) {
 function createStockInfoDiv(stockJSON) {
   var stockDetailElement = document.querySelector('#'+stockJSON["symbol"])
 
-  var moreDetailedInfo = document.createElement("div")
-  moreDetailedInfo.classList.add("more_detailed_info")
-  var stockInfo = document.createElement("p")
+  var moreInfo = document.querySelector("#templates .more_detailed_info").cloneNode(true)
 
-  stockInfo.textContent = stockJSON["Change_PercentChange"]
+  console.log(moreInfo)
 
-  moreDetailedInfo.appendChild(stockInfo)
+  moreInfo.querySelector('.day_range p')
+  .textContent = "Day's Range: $"  + stockJSON["DaysLow"] + " - $" + stockJSON["DaysHigh"]
 
-  stockDetailElement.appendChild(moreDetailedInfo)
-
-
+  stockDetailElement.appendChild(moreInfo)
 
 }
+
+function createElementWithText(element_type, text) {
+  var element = document.createElement(element_type)
+  infoColumn.classList.add("infoColumn")
+  element.textContent = text
+}
+
+
