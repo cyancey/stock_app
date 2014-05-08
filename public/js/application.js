@@ -10,6 +10,7 @@ function setListeners() {
   $(".home").on('click', "#add_another_stock", addAnotherStock)
   $(".stock_list").on('click', '.delete_stock', deleteStock)
   $(".home").on('submit', "#add_stock_form", addStocks)
+  $(".home").on('click', ".more_info", moreInfo)
 }
 
 function showAddStocksForm(event) {
@@ -103,7 +104,6 @@ function addStocks(event) {
 
 function appendNewStocks(response) {
   $(".stock_list").append($(response))
-  console.log($(response))
   updateAllShareValues()
   updatePortfolioValue()
 }
@@ -117,8 +117,6 @@ function calculateStockValue(stockDetailElement) {
 function updateShareValue(stockDetailElement) {
   var shareValue = calculateStockValue(stockDetailElement)
   var shareValueElement = stockDetailElement.querySelector(".user_share_value")
-
-  console.log(shareValue)
 
   if (isNaN(shareValue))
   {
@@ -153,8 +151,14 @@ function calculatePortfolioTotal() {
 function updatePortfolioValue() {
   var portfolioValueElement = document.querySelector("#portfolio-total")
   var portfolioValue = calculatePortfolioTotal()
-  console.log(portfolioValue)
   portfolioValueElement.textContent = "Portfolio Total: $ " + formatNumsWithCommas(portfolioValue)
 
   portfolioValueElement.setAttribute('data-portfolio-value', portfolioValue)
+}
+
+function moreInfo(event) {
+  event.preventDefault()
+  console.log("in more info")
+  console.log(this)
+  console.log(event)
 }

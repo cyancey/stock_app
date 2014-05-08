@@ -66,7 +66,7 @@ body {
 .stock_detail .remove_stock {
   text-decoration: none;
   text-align: right;
-  width: 5%;
+  width: 2%;
   border: 1px solid blue;
   display: inline-block;
   float: right
@@ -96,4 +96,9 @@ body {
   width: 30%;
   float: right;
   font-weight: bold;
+}
+
+.more_info {
+  display: inline-block;
+
 }
