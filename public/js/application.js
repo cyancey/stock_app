@@ -1,5 +1,7 @@
 $(document).ready(function() {
   setListeners()
+  updateAllShareValues()
+  updatePortfolioValue()
 });
 
 function setListeners() {
@@ -21,10 +23,6 @@ function showAddStocksForm(event) {
 function cancelStockAdd() {
   event.preventDefault()
   resetAddStockForm()
-  // $("#cancel_stock_add_link").toggleClass("hidden")
-  // $("#add_stocks_link").toggleClass("hidden")
-  // $("#add_stock_form").toggleClass("hidden")
-  // $("#add_another_stock").toggleClass("hidden")
 }
 
 function addAnotherStock() {
@@ -68,9 +66,12 @@ function deleteStock(event) {
 
 function removeStockElement(response) {
   $("#"+response).remove()
+  updatePortfolioValue()
 }
 
 function resetAddStockForm() {
+  $("#request_status").text("Request Processing")
+  $("#request_status").toggleClass("hidden")
   $(".add_stocks").remove()
   var ajaxRequest = $.ajax({
     url: 'users/stocks/new',
@@ -81,7 +82,9 @@ function resetAddStockForm() {
 }
 
 function appendAddStockForm(response) {
+  $("#request_status").toggleClass("hidden")
   $(".add_stock_container").append(response)
+
 }
 
 function addStocks(event) {
@@ -101,4 +104,57 @@ function addStocks(event) {
 function appendNewStocks(response) {
   $(".stock_list").append($(response))
   console.log($(response))
+  updateAllShareValues()
+  updatePortfolioValue()
+}
+
+function calculateStockValue(stockDetailElement) {
+  var stockData = stockDetailElement.dataset
+  var shareValue = parseFloat(stockData.price) * parseFloat(stockData.shareQuantity)
+  return Math.floor(shareValue*100)/100
+}
+
+function updateShareValue(stockDetailElement) {
+  var shareValue = calculateStockValue(stockDetailElement)
+  var shareValueElement = stockDetailElement.querySelector(".user_share_value")
+
+  console.log(shareValue)
+
+  if (isNaN(shareValue))
+  {
+    shareValue = 0
+  }
+  stockDetailElement.setAttribute('data-user-share-value', shareValue)
+
+  shareValueElement.textContent = "$ " +formatNumsWithCommas(shareValue)
+}
+
+function formatNumsWithCommas(number) {
+  return number.toLocaleString()
+}
+
+function updateAllShareValues() {
+  var stockDetailElements = document.querySelectorAll(".stock_detail")
+  for (var i = 0; i < stockDetailElements.length; i++) {
+    updateShareValue(stockDetailElements[i])
+  }
+}
+
+function calculatePortfolioTotal() {
+  var stockDetailElements = document.querySelectorAll(".stock_detail")
+  var total = 0
+  for (var i = 0; i < stockDetailElements.length; i++) {
+    var shareValue = parseFloat(stockDetailElements[i].dataset.userShareValue)
+    total += shareValue
+  }
+  return total
+}
+
+function updatePortfolioValue() {
+  var portfolioValueElement = document.querySelector("#portfolio-total")
+  var portfolioValue = calculatePortfolioTotal()
+  console.log(portfolioValue)
+  portfolioValueElement.textContent = "Portfolio Total: $ " + formatNumsWithCommas(portfolioValue)
+
+  portfolioValueElement.setAttribute('data-portfolio-value', portfolioValue)
 }
