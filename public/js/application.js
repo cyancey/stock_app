@@ -1,5 +1,7 @@
 $(document).ready(function() {
   setListeners()
+  updateAllShareValues()
+  updatePortfolioValue()
 });
 
 function setListeners() {
@@ -8,6 +10,7 @@ function setListeners() {
   $(".home").on('click', "#add_another_stock", addAnotherStock)
   $(".stock_list").on('click', '.delete_stock', deleteStock)
   $(".home").on('submit', "#add_stock_form", addStocks)
+  $(".home").on('click', ".more_info", moreInfo)
 }
 
 function showAddStocksForm(event) {
@@ -21,10 +24,6 @@ function showAddStocksForm(event) {
 function cancelStockAdd() {
   event.preventDefault()
   resetAddStockForm()
-  // $("#cancel_stock_add_link").toggleClass("hidden")
-  // $("#add_stocks_link").toggleClass("hidden")
-  // $("#add_stock_form").toggleClass("hidden")
-  // $("#add_another_stock").toggleClass("hidden")
 }
 
 function addAnotherStock() {
@@ -68,9 +67,12 @@ function deleteStock(event) {
 
 function removeStockElement(response) {
   $("#"+response).remove()
+  updatePortfolioValue()
 }
 
 function resetAddStockForm() {
+  $("#request_status").text("Request Processing")
+  $("#request_status").toggleClass("hidden")
   $(".add_stocks").remove()
   var ajaxRequest = $.ajax({
     url: 'users/stocks/new',
@@ -81,7 +83,9 @@ function resetAddStockForm() {
 }
 
 function appendAddStockForm(response) {
+  $("#request_status").toggleClass("hidden")
   $(".add_stock_container").append(response)
+
 }
 
 function addStocks(event) {
@@ -100,5 +104,90 @@ function addStocks(event) {
 
 function appendNewStocks(response) {
   $(".stock_list").append($(response))
-  console.log($(response))
+  updateAllShareValues()
+  updatePortfolioValue()
+}
+
+function calculateStockValue(stockDetailElement) {
+  var stockData = stockDetailElement.dataset
+  var shareValue = parseFloat(stockData.price) * parseFloat(stockData.shareQuantity)
+  return Math.floor(shareValue*100)/100
+}
+
+function updateShareValue(stockDetailElement) {
+  var shareValue = calculateStockValue(stockDetailElement)
+  var shareValueElement = stockDetailElement.querySelector(".user_share_value")
+
+  if (isNaN(shareValue))
+  {
+    shareValue = 0
+  }
+  stockDetailElement.setAttribute('data-user-share-value', shareValue)
+
+  shareValueElement.textContent = "$ " +formatNumsWithCommas(shareValue)
+}
+
+function formatNumsWithCommas(number) {
+  return number.toLocaleString()
+}
+
+function updateAllShareValues() {
+  var stockDetailElements = document.querySelectorAll(".stock_detail")
+  for (var i = 0; i < stockDetailElements.length; i++) {
+    updateShareValue(stockDetailElements[i])
+  }
+}
+
+function calculatePortfolioTotal() {
+  var stockDetailElements = document.querySelectorAll(".stock_detail")
+  var total = 0
+  for (var i = 0; i < stockDetailElements.length; i++) {
+    var shareValue = parseFloat(stockDetailElements[i].dataset.userShareValue)
+    total += shareValue
+  }
+  return total
+}
+
+function updatePortfolioValue() {
+  var portfolioValueElement = document.querySelector("#portfolio-total")
+  var portfolioValue = calculatePortfolioTotal()
+  portfolioValueElement.textContent = "Portfolio Total: $ " + formatNumsWithCommas(portfolioValue)
+
+  portfolioValueElement.setAttribute('data-portfolio-value', portfolioValue)
+}
+
+function moreInfo(event) {
+  event.preventDefault()
+  var ticker_symbol = this.dataset.symbol
+
+  var ajaxRequest = $.ajax({
+    url: '/users/stocks/more_info',
+    type: 'GET',
+    data: {ticker_symbol: ticker_symbol}
+  })
+
+  ajaxRequest.done(appendMoreInfo)
+}
+
+function appendMoreInfo(response) {
+  console.log(response)
+  var stock = JSON.parse(response)
+  createStockInfoDiv(stock)
+}
+
+function createStockInfoDiv(stockJSON) {
+  var stockDetailElement = document.querySelector('#'+stockJSON["symbol"])
+
+  var moreDetailedInfo = document.createElement("div")
+  moreDetailedInfo.classList.add("more_detailed_info")
+  var stockInfo = document.createElement("p")
+
+  stockInfo.textContent = stockJSON["Change_PercentChange"]
+
+  moreDetailedInfo.appendChild(stockInfo)
+
+  stockDetailElement.appendChild(moreDetailedInfo)
+
+
+
 }

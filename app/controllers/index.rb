@@ -1,3 +1,5 @@
+require_relative "../models/stock_query_detailed"
+
 get '/' do
   if logged_in?
     @user = current_user
@@ -39,21 +41,9 @@ post '/logout' do
   redirect '/'
 end
 
-# post '/users/stocks' do
-#   # stock_symbols = []
-#   inputs_for_adding_stocks(params).each do |stock_input|
-#     stock = current_user.user_stocks.create(ticker_symbol: params[:ticker_symbol].upcase, share_quantity: params[:share_quantity])
-#     # stock_symbols << stock.ticker_symbol unless stock.id == nil
-#   end
-
-
-#   redirect '/'
-# end
-
 post '/users/stocks' do
   stock_symbols = []
   share_quantities = []
-  # sanitized_ticker_symbol = params[:ticker_symbol].upcase unless params[:ticker_symbol] == nil
   inputs_for_adding_stocks(params).each do |stock_input|
     unless stock_input[:ticker_symbol].nil? || stock_input[:ticker_symbol] == ""
       stock = current_user.user_stocks.create(ticker_symbol: stock_input[:ticker_symbol], share_quantity: stock_input[:share_quantity])
@@ -77,4 +67,7 @@ delete '/users/stocks' do
   ticker_symbol
 end
 
-
+get '/users/stocks/more_info' do
+  p params
+  p StockQuery.stock_query([params["ticker_symbol"]]).to_json
+end

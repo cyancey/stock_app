@@ -4,15 +4,19 @@
     <h2>Boiler Room</h2>
   </div>
 
+  <div id="request_status" class="hidden"></div>
+
   <div class ="stock_list">
     <% if @stocks %>
     <%= erb :_stock_list %>
     <% end %>
   </div>
+  <div id="portfolio-total"></div>
   <br>
 
 
   <div class = "add_stock_container">
   <%= erb :_add_stock %>
   </div>
+
 </div>
