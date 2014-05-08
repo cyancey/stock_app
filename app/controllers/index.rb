@@ -1,3 +1,5 @@
+require_relative "../models/stock_query_detailed"
+
 get '/' do
   if logged_in?
     @user = current_user
@@ -65,4 +67,7 @@ delete '/users/stocks' do
   ticker_symbol
 end
 
-
+get '/users/stocks/more_info' do
+  p params
+  p StockQuery.stock_query([params["ticker_symbol"]]).to_json
+end

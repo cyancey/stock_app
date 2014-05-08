@@ -161,4 +161,36 @@ function moreInfo(event) {
   console.log("in more info")
   console.log(this)
   console.log(event)
+  var ticker_symbol = this.dataset.symbol
+
+  var ajaxRequest = $.ajax({
+    url: '/users/stocks/more_info',
+    type: 'GET',
+    data: {ticker_symbol: ticker_symbol}
+  })
+
+  ajaxRequest.done(appendMoreInfo)
+}
+
+function appendMoreInfo(response) {
+  console.log(response)
+  var stock = JSON.parse(response)
+  createStockInfoDiv(stock)
+}
+
+function createStockInfoDiv(stockJSON) {
+  var stockDetailElement = document.querySelector('#'+stockJSON["symbol"])
+
+  var moreDetailedInfo = document.createElement("div")
+  moreDetailedInfo.classList.add("more_detailed_info")
+  var stockInfo = document.createElement("p")
+
+  stockInfo.textContent = stockJSON["Change_PercentChange"]
+
+  moreDetailedInfo.appendChild(stockInfo)
+
+  stockDetailElement.appendChild(moreDetailedInfo)
+
+
+
 }

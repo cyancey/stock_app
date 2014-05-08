@@ -1,4 +1,4 @@
-require_relative 'StockQueryDetailed'
+require_relative 'stock_query_detailed'
 
 module StockFactory
   def self.stocks(quotes_array)
