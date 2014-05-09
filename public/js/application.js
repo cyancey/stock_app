@@ -13,6 +13,8 @@ function setListeners() {
   $(".home").on('click', ".more_info", moreInfo)
   $(".home").on('click', ".shares", insertUpdateForm)
   $(".home").on('submit', ".share_update_form form", updateShares)
+  $(".home").on('click', ".hide_info", hideInfo)
+
 }
 
 function showAddStocksForm(event) {
@@ -181,9 +183,14 @@ function appendMoreInfo(response) {
 function createStockInfoDiv(stockJSON) {
   var stockDetailElement = document.querySelector('#'+stockJSON["symbol"])
 
-  var moreInfo = document.querySelector("#templates .more_detailed_info").cloneNode(true)
+  var moreInfoLinkDiv = stockDetailElement.querySelector(".more_info")
 
-  console.log(moreInfo)
+  moreInfoLinkDiv.classList.add("hide_info")
+  moreInfoLinkDiv.classList.remove("more_info")
+
+  moreInfoLinkDiv.querySelector('a').textContent = "hide info"
+
+  var moreInfo = document.querySelector("#templates .more_detailed_info").cloneNode(true)
 
   moreInfo.querySelector('.day_range p')
   .textContent = "Day's Range: $"  + formatNumsWithCommas(stockJSON["DaysLow"]) + " - $" + formatNumsWithCommas(stockJSON["DaysHigh"])
@@ -194,35 +201,21 @@ function createStockInfoDiv(stockJSON) {
   moreInfo.querySelector('.day_change p')
   .textContent = "Daily Change: $"  + formatNumsWithCommas(stockJSON["Change"])
 
+
+
   stockDetailElement.appendChild(moreInfo)
 
 }
 
-// function shareUpdateForm(event) {
-//   event.preventDefault
-//   ajaxRequest = $.ajax({
-//     url: '/users/stocks/shares',
-//     type: 'GET'
-//   })
-
-//   ajaxRequest.done(insertUpdateForm)
-// }
 
 function insertUpdateForm() {
   var shareForm = document.querySelector("#templates .share_update_form").cloneNode(true)
   var tickerSymbol = this.parentNode.dataset.symbol
 
   var shareElement = document.querySelector("#"+tickerSymbol+" .shares")
-
   shareElement.innerText=""
   shareElement.appendChild(shareForm)
-  // $(shareElement).off('click')
   $(".home").off('click', ".shares", insertUpdateForm)
-
-  // var ajaxRequest = $.ajax({
-  //   url:
-
-  // })
 
 }
 
@@ -251,9 +244,7 @@ function updateShareDOM(response) {
   var tickerSymbol = stockInfo.ticker_symbol
   var shareQuantity = stockInfo.share_qty
   var stockElement = document.querySelector("#"+tickerSymbol)
-
   sharesDiv = stockElement.querySelector(".shares")
-
   sharesDiv.dataset.shareQuantity = shareQuantity
   sharesDiv.textContent = "Shares: "+shareQuantity
   stockElement.dataset.shareQuantity = shareQuantity
@@ -262,9 +253,17 @@ function updateShareDOM(response) {
 
   updateAllShareValues()
   updatePortfolioValue()
+}
 
-  console.log(stockElement)
-  console.log(stockInfo)
+function hideInfo(event) {
+  event.preventDefault()
+  moreDetailedInfo = this.parentNode.querySelector(".more_detailed_info")
+  stockElement = this.parentNode
+  stockElement.removeChild(moreDetailedInfo)
+  hideInfoLink = stockElement.querySelector(".hide_info")
+  hideInfoLink.classList.add("more_info")
+  hideInfoLink.classList.remove("hide_info")
+  hideInfoLink.querySelector('a').textContent = "more info"
 }
 
 

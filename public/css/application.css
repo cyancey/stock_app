@@ -99,7 +99,7 @@ body {
   margin-right: 125px
 }
 
-.more_info {
+.more_info, .hide_info {
   display: inline-block;
 
 }
