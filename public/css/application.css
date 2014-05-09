@@ -111,3 +111,9 @@ body {
 
 }
 
+.share_update_form input {
+  width: 25%;
+  display: inline-block;
+  text-align: right;
+}
+

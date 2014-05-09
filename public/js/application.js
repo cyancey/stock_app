@@ -11,6 +11,8 @@ function setListeners() {
   $(".stock_list").on('click', '.delete_stock', deleteStock)
   $(".home").on('submit', "#add_stock_form", addStocks)
   $(".home").on('click', ".more_info", moreInfo)
+  $(".home").on('click', ".shares", insertUpdateForm)
+  $(".home").on('submit', ".share_update_form form", updateShares)
 }
 
 function showAddStocksForm(event) {
@@ -111,7 +113,7 @@ function appendNewStocks(response) {
 function calculateStockValue(stockDetailElement) {
   var stockData = stockDetailElement.dataset
   var shareValue = parseFloat(stockData.price) * parseFloat(stockData.shareQuantity)
-  return Math.floor(shareValue*100)/100
+  return (Math.floor(shareValue*100)/100)
 }
 
 function updateShareValue(stockDetailElement) {
@@ -128,7 +130,8 @@ function updateShareValue(stockDetailElement) {
 }
 
 function formatNumsWithCommas(number) {
-  return number.toLocaleString()
+  parsedNum = parseFloat(number)
+  return parsedNum.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})
 }
 
 function updateAllShareValues() {
@@ -183,16 +186,87 @@ function createStockInfoDiv(stockJSON) {
   console.log(moreInfo)
 
   moreInfo.querySelector('.day_range p')
-  .textContent = "Day's Range: $"  + stockJSON["DaysLow"] + " - $" + stockJSON["DaysHigh"]
+  .textContent = "Day's Range: $"  + formatNumsWithCommas(stockJSON["DaysLow"]) + " - $" + formatNumsWithCommas(stockJSON["DaysHigh"])
+
+  moreInfo.querySelector('.fifty_day_mvg_avg p')
+  .textContent = "50 Day Moving Avg: $"  + formatNumsWithCommas(stockJSON["FiftydayMovingAverage"])
+
+  moreInfo.querySelector('.day_change p')
+  .textContent = "Daily Change: $"  + formatNumsWithCommas(stockJSON["Change"])
 
   stockDetailElement.appendChild(moreInfo)
 
 }
 
-function createElementWithText(element_type, text) {
-  var element = document.createElement(element_type)
-  infoColumn.classList.add("infoColumn")
-  element.textContent = text
+// function shareUpdateForm(event) {
+//   event.preventDefault
+//   ajaxRequest = $.ajax({
+//     url: '/users/stocks/shares',
+//     type: 'GET'
+//   })
+
+//   ajaxRequest.done(insertUpdateForm)
+// }
+
+function insertUpdateForm() {
+  var shareForm = document.querySelector("#templates .share_update_form").cloneNode(true)
+  var tickerSymbol = this.parentNode.dataset.symbol
+
+  var shareElement = document.querySelector("#"+tickerSymbol+" .shares")
+
+  shareElement.innerText=""
+  shareElement.appendChild(shareForm)
+  // $(shareElement).off('click')
+  $(".home").off('click', ".shares", insertUpdateForm)
+
+  // var ajaxRequest = $.ajax({
+  //   url:
+
+  // })
+
 }
+
+
+
+
+
+function updateShares(event) {
+  event.preventDefault()
+  console.log("boom")
+  var ticker_symbol = this.parentNode.parentNode.parentNode.dataset.symbol
+
+  console.log(this.parentNode.parentNode.parentNode.dataset.symbol)
+
+  ajaxRequest = $.ajax({
+    url: '/users/stocks/shares',
+    type: 'PUT',
+    data: {"ticker_symbol": ticker_symbol, share_qty: this.share_qty.value}
+  })
+
+  ajaxRequest.done(updateShareDOM)
+}
+
+function updateShareDOM(response) {
+  var stockInfo = JSON.parse(response)
+  var tickerSymbol = stockInfo.ticker_symbol
+  var shareQuantity = stockInfo.share_qty
+  var stockElement = document.querySelector("#"+tickerSymbol)
+
+  sharesDiv = stockElement.querySelector(".shares")
+
+  sharesDiv.dataset.shareQuantity = shareQuantity
+  sharesDiv.textContent = "Shares: "+shareQuantity
+  stockElement.dataset.shareQuantity = shareQuantity
+
+  $(".home").on('click', ".shares", insertUpdateForm)
+
+  updateAllShareValues()
+  updatePortfolioValue()
+
+  console.log(stockElement)
+  console.log(stockInfo)
+}
+
+
 
 
