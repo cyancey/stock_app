@@ -1,4 +1,4 @@
-require_relative "../models/stock_query_detailed"
+# require_relative "../models/stock_query_detailed"
 
 get '/' do
   if logged_in?
@@ -70,4 +70,14 @@ end
 get '/users/stocks/more_info' do
   p params
   p StockQuery.stock_query([params["ticker_symbol"]]).to_json
+end
+
+get '/users/stocks/shares' do
+  erb :_share_quantity_update, layout: false
+end
+
+put '/users/stocks/shares' do
+  stock = current_user.user_stocks.find_by_ticker_symbol(params[:ticker_symbol])
+  stock.update_attributes(share_quantity: params[:share_qty])
+  {ticker_symbol: params[:ticker_symbol], share_qty: params[:share_qty]}.to_json
 end

@@ -17,7 +17,37 @@
 
   <title></title>
 </head>
-<body class = "container">
+<body >
   <%= yield %>
+
+  <div id="templates" class="hidden">
+    <div class="more_detailed_info">
+      <div class= "info_column">
+        <div class = "day_range">
+          <p></p>
+        </div>
+        <div class = "fifty_day_mvg_avg">
+          <p></p>
+        </div>
+        <div class = "day_change">
+          <p></p>
+        </div>
+      </div>
+      <div class="info_column">
+      </div>
+    </div>
+
+    <div class = "share_update_form">
+      <form action="/users/stocks/update" method="post">
+        Shares:<input type="text" name="share_qty">
+      </form>
+    </div>
+
+    <div class = "hide_info">
+      <a href = "">hide info</a>
+    </div>
+
+  </div>
+
 </body>
 </html>

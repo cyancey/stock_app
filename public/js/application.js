@@ -11,6 +11,10 @@ function setListeners() {
   $(".stock_list").on('click', '.delete_stock', deleteStock)
   $(".home").on('submit', "#add_stock_form", addStocks)
   $(".home").on('click', ".more_info", moreInfo)
+  $(".home").on('click', ".shares", insertUpdateForm)
+  $(".home").on('submit', ".share_update_form form", updateShares)
+  $(".home").on('click', ".hide_info", hideInfo)
+
 }
 
 function showAddStocksForm(event) {
@@ -111,7 +115,7 @@ function appendNewStocks(response) {
 function calculateStockValue(stockDetailElement) {
   var stockData = stockDetailElement.dataset
   var shareValue = parseFloat(stockData.price) * parseFloat(stockData.shareQuantity)
-  return Math.floor(shareValue*100)/100
+  return (Math.floor(shareValue*100)/100)
 }
 
 function updateShareValue(stockDetailElement) {
@@ -128,7 +132,8 @@ function updateShareValue(stockDetailElement) {
 }
 
 function formatNumsWithCommas(number) {
-  return number.toLocaleString()
+  parsedNum = parseFloat(number)
+  return parsedNum.toLocaleString("en-IN", {minimumFractionDigits: 2, maximumFractionDigits: 2})
 }
 
 function updateAllShareValues() {
@@ -178,16 +183,89 @@ function appendMoreInfo(response) {
 function createStockInfoDiv(stockJSON) {
   var stockDetailElement = document.querySelector('#'+stockJSON["symbol"])
 
-  var moreDetailedInfo = document.createElement("div")
-  moreDetailedInfo.classList.add("more_detailed_info")
-  var stockInfo = document.createElement("p")
+  var moreInfoLinkDiv = stockDetailElement.querySelector(".more_info")
 
-  stockInfo.textContent = stockJSON["Change_PercentChange"]
+  moreInfoLinkDiv.classList.add("hide_info")
+  moreInfoLinkDiv.classList.remove("more_info")
 
-  moreDetailedInfo.appendChild(stockInfo)
+  moreInfoLinkDiv.querySelector('a').textContent = "hide info"
 
-  stockDetailElement.appendChild(moreDetailedInfo)
+  var moreInfo = document.querySelector("#templates .more_detailed_info").cloneNode(true)
+
+  moreInfo.querySelector('.day_range p')
+  .textContent = "Day's Range: $"  + formatNumsWithCommas(stockJSON["DaysLow"]) + " - $" + formatNumsWithCommas(stockJSON["DaysHigh"])
+
+  moreInfo.querySelector('.fifty_day_mvg_avg p')
+  .textContent = "50 Day Moving Avg: $"  + formatNumsWithCommas(stockJSON["FiftydayMovingAverage"])
+
+  moreInfo.querySelector('.day_change p')
+  .textContent = "Daily Change: $"  + formatNumsWithCommas(stockJSON["Change"])
 
 
+
+  stockDetailElement.appendChild(moreInfo)
 
 }
+
+
+function insertUpdateForm() {
+  var shareForm = document.querySelector("#templates .share_update_form").cloneNode(true)
+  var tickerSymbol = this.parentNode.dataset.symbol
+
+  var shareElement = document.querySelector("#"+tickerSymbol+" .shares")
+  shareElement.innerText=""
+  shareElement.appendChild(shareForm)
+  $(".home").off('click', ".shares", insertUpdateForm)
+
+}
+
+
+
+
+
+function updateShares(event) {
+  event.preventDefault()
+  console.log("boom")
+  var ticker_symbol = this.parentNode.parentNode.parentNode.dataset.symbol
+
+  console.log(this.parentNode.parentNode.parentNode.dataset.symbol)
+
+  ajaxRequest = $.ajax({
+    url: '/users/stocks/shares',
+    type: 'PUT',
+    data: {"ticker_symbol": ticker_symbol, share_qty: this.share_qty.value}
+  })
+
+  ajaxRequest.done(updateShareDOM)
+}
+
+function updateShareDOM(response) {
+  var stockInfo = JSON.parse(response)
+  var tickerSymbol = stockInfo.ticker_symbol
+  var shareQuantity = stockInfo.share_qty
+  var stockElement = document.querySelector("#"+tickerSymbol)
+  sharesDiv = stockElement.querySelector(".shares")
+  sharesDiv.dataset.shareQuantity = shareQuantity
+  sharesDiv.textContent = "Shares: "+shareQuantity
+  stockElement.dataset.shareQuantity = shareQuantity
+
+  $(".home").on('click', ".shares", insertUpdateForm)
+
+  updateAllShareValues()
+  updatePortfolioValue()
+}
+
+function hideInfo(event) {
+  event.preventDefault()
+  moreDetailedInfo = this.parentNode.querySelector(".more_detailed_info")
+  stockElement = this.parentNode
+  stockElement.removeChild(moreDetailedInfo)
+  hideInfoLink = stockElement.querySelector(".hide_info")
+  hideInfoLink.classList.add("more_info")
+  hideInfoLink.classList.remove("hide_info")
+  hideInfoLink.querySelector('a').textContent = "more info"
+}
+
+
+
+
