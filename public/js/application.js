@@ -219,10 +219,6 @@ function insertUpdateForm() {
 
 }
 
-
-
-
-
 function updateShares(event) {
   event.preventDefault()
   console.log("boom")
@@ -265,7 +261,3 @@ function hideInfo(event) {
   hideInfoLink.classList.remove("hide_info")
   hideInfoLink.querySelector('a').textContent = "more info"
 }
-
-
-
-
